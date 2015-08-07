@@ -506,6 +506,43 @@ static BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signa
 }
 
 
+#pragma mark Base64
+#pragma mark
+#pragma mark Base 64 encoding
+
+
+
+- (NSString *)encodeBase64:(const uint8_t *)input length:(NSInteger)length
+{
+    return [RRBase64Manager encodeBase64WithBytes:input
+                                           length:length];
+}
+
+
+- (NSString *)decodeBase64:(NSString *)input
+{
+    NSData *decodedData = [RRBase64Manager decodeBase64WithString:input];
+    NSString *decodedString   = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
+    
+    return decodedString;
+}
+
+const char *base64_encode(const void* buf, size_t size)
+{
+    return [[RRBase64Manager encodeBase64WithBytes:buf
+                                            length:size] UTF8String];
+    
+}
+
+NSData *base64_decode(NSString *input)
+{
+    return [RRBase64Manager decodeBase64WithString:input];
+}
+
+@end
+
+
+
 #pragma mark
 #pragma mark Check Receipt signature
 
@@ -733,39 +770,3 @@ outLabel:
     
     return valid;
 }
-
-#pragma mark Base64
-#pragma mark
-#pragma mark Base 64 encoding
-
-
-
-- (NSString *)encodeBase64:(const uint8_t *)input length:(NSInteger)length
-{
-	return [RRBase64Manager encodeBase64WithBytes:input
-										   length:length];
-}
-
-
-- (NSString *)decodeBase64:(NSString *)input
-{
-	NSData *decodedData = [RRBase64Manager decodeBase64WithString:input];
-    NSString *decodedString   = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
-
-    return decodedString;
-}
-
-const char *base64_encode(const void* buf, size_t size)
-{
-	return [[RRBase64Manager encodeBase64WithBytes:buf
-										   length:size] UTF8String];
-
-}
-
-NSData *base64_decode(NSString *input)
-{
-	return [RRBase64Manager decodeBase64WithString:input];
-}
-
-@end
-
